@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      volumes:
+        - name: {{ .Values.app.name }}-data
+          hostPath:
+            path: {{ .Values.pg.data_dir }}
+            type: DirectoryOrCreate
+      containers:
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: {{ .Values.app.memory | quote }}
+            cpu: {{ .Values.app.cpu | quote }}
+        ports:
+        - containerPort: {{ .Values.port.target }}
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.app.name }}-auth-secret
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.app.name }}-auth-secret
+                key: password
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.app.name }}-configmap
+        volumeMounts:
+          - mountPath: {{ .Values.pg.data_mount }}
+            name: {{ .Values.app.name }}-data

@@ -1,0 +1,20 @@
+app:
+  name: postgres
+  memory: "128Mi"
+  cpu: "500m"
+
+image:
+  name: postgres
+  tag: alpine
+
+port:
+  target: 5432
+  node: 30001
+
+pg:
+  username: seshu
+  database: database
+  password: "ENTER_PASSWORD_HERE"
+  data_dir: /mnt/c/Users/seshu/.postgres
+  data_mount: /var/lib/postgresql/data
+  
