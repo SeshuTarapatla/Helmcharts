@@ -12,8 +12,9 @@ port:
   node: 30001
 
 pg:
-  username: seshu
   database: database
+  host: localhost
+  username: seshu
   password: "ENTER_PASSWORD_HERE"
   data_dir: /mnt/c/Users/seshu/.postgres
   data_mount: /var/lib/postgresql/data
