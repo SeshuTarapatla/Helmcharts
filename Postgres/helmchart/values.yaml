@@ -18,4 +18,5 @@ pg:
   password: "ENTER_PASSWORD_HERE"
   data_dir: /mnt/c/Users/seshu/.postgres
   data_mount: /var/lib/postgresql/data
+  timezone: Asia/Kolkata
   

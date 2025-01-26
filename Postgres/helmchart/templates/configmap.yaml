@@ -6,3 +6,4 @@ data:
   POSTGRES_DB: {{ .Values.pg.database }}
   POSTGRES_HOST: {{ .Values.pg.host }}
   POSTGRES_PORT: {{ .Values.port.node | quote }}
+  TZ: {{ .Values.pg.timezone }}
