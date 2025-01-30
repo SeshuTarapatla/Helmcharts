@@ -1,7 +1,7 @@
 app:
   name: postgres
-  memory: "128Mi"
-  cpu: "500m"
+  memory: "2Gi"
+  cpu: "2000m"
 
 image:
   name: postgres
