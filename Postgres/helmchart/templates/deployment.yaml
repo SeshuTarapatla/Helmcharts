@@ -12,16 +12,18 @@ spec:
         app: {{ .Values.app }}
     spec:
       volumes:
-        - name: {{ .Values.app }}-data
-          hostPath:
-            path: {{ .Values.pg.data_dir }}
-            type: DirectoryOrCreate
+      - name: {{ .Values.app }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.app }}-data
       containers:
       - name: {{ .Values.app }}
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.port.target }}
+        volumeMounts:
+        - name: {{ .Values.app }}-data
+          mountPath: /var/lib/postgresql/data
         env:
           - name: POSTGRES_USER
             valueFrom:
@@ -36,6 +38,3 @@ spec:
         envFrom:
           - configMapRef:
               name: {{ .Values.app }}-configmap
-        volumeMounts:
-          - mountPath: {{ .Values.pg.data_mount }}
-            name: {{ .Values.app }}-data

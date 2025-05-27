@@ -2,7 +2,7 @@ app: postgres
 
 image:
   name: postgres
-  tag: alpine
+  tag: 16.8-alpine
 
 port:
   target: 5432
@@ -16,4 +16,7 @@ pg:
   data_dir: /mnt/c/Users/seshu/.postgres
   data_mount: /var/lib/postgresql/data
   timezone: Asia/Kolkata
-  
+
+volume:
+  size: 2Gi
+  storageClass: "local-path"
