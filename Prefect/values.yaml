@@ -2,6 +2,7 @@ app: "prefect"
 image: "prefecthq/prefect:3.6.10-python3.14-kubernetes"
 server:
   port: 4200
+  workpool: default-pool
 postgres:
   configmap: "postgres-configmap"
   secret: "postgres-auth-secret"
