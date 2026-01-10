@@ -6,7 +6,7 @@ image:
 
 port:
   target: 5432
-  node: 30001
+  node: 5432
 
 pg:
   database: database
@@ -16,4 +16,3 @@ pg:
   data_dir: /mnt/c/Users/seshu/.postgres
   data_mount: /var/lib/postgresql/data
   timezone: Asia/Kolkata
-  

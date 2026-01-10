@@ -9,5 +9,4 @@ spec:
     - protocol: TCP
       port: {{ .Values.port.target }}
       targetPort: {{ .Values.port.target }}
-      nodePort: {{ .Values.port.node }}
-  type: NodePort
+  type: LoadBalancer
