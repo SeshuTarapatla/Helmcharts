@@ -1,0 +1,9 @@
+app: "prefect"
+image: "prefecthq/prefect:3.6.10-python3.14-kubernetes"
+server:
+  port: 4200
+postgres:
+  configmap: "postgres-configmap"
+  secret: "postgres-auth-secret"
+  service: "postgres-service"
+  image: "postgres:alpine"
