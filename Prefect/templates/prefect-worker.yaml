@@ -12,6 +12,10 @@ spec:
       labels:
         app: {{ .Values.app }}-worker
     spec:
+      volumes:
+        - name: insta-automate
+          hostPath:
+            path: {{ .Values.insta_automate.src }}
       initContainers:
         - name: wait-for-prefect-server
           image: busybox:latest
@@ -23,6 +27,7 @@ spec:
           command: ["sh", "-c", "until nc -z ${PREFECT_HOST} ${PREFECT_PORT}; do sleep 2; done "]
         - name: create-work-pool
           image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
           env:
             - name: PREFECT_API_URL
               value: "http://{{ .Values.app }}-server:{{ .Values.server.port }}/api"
@@ -34,7 +39,11 @@ spec:
       containers:
         - name: {{ .Values.app }}-worker
           image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
           env:
             - name: PREFECT_API_URL
               value: "http://{{ .Values.app }}-server:{{ .Values.server.port }}/api"
           command: ["prefect", "worker", "start", "--pool", "{{ .Values.server.workpool }}"]
+          volumeMounts:
+            - name: "insta-automate"
+              mountPath: {{ .Values.insta_automate.mnt }}

@@ -1,5 +1,5 @@
 app: "prefect"
-image: "prefecthq/prefect:3.6.10-python3.14-kubernetes"
+image: "prefect-image:latest"
 server:
   port: 4200
   workpool: default-pool
@@ -8,3 +8,6 @@ postgres:
   secret: "postgres-auth-secret"
   service: "postgres-service"
   image: "postgres:alpine"
+insta_automate:
+  src: "/mnt/d/Coding/GitHub/Insta-Automate"
+  mnt: "/opt/prefect/Insta-Automate"

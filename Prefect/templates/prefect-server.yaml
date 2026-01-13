@@ -30,6 +30,7 @@ spec:
       containers:
         - name: {{ .Values.app }}-server
           image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
           command: ["prefect", "server", "start", "--host", "0.0.0.0"]
           ports:
             - containerPort: {{ .Values.server.port }}
