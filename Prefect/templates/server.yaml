@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app }}-server
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}-server
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}-server
+    spec:
+      initContainers:
+      - name: {{ .Values.app }}-db-init
+        image: "{{ .Values.pg.image.name }}:{{ .Values.pg.image.tag }}"
+        env: {{ include "pg.env" . | nindent 12 }}
+        command:
+          - sh
+          - -c
+          - |
+            set -e
+            echo "Ensuring {{ .Values.app }} database exists..."
+            psql -d postgres -tc \
+              "SELECT 1 FROM pg_database WHERE datname = '{{ .Values.app }}'" \
+            | grep -q 1 \
+            || psql -d postgres -c "CREATE DATABASE {{ .Values.app }}"
+            echo "{{ .Values.app }} database ready."
+      containers:
+      - name: {{ .Values.app }}-server
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.port }}
+        env: {{ include "pg.env" . | nindent 12 }}
+        command: ["prefect", "server", "start", "--host", "0.0.0.0"]

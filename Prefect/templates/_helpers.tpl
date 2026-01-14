@@ -1,21 +1,28 @@
-{{- define "prefect.dbEnv" }}
+{{- define "pg.env" -}}
 - name: PGHOST
-  value: {{ .Values.postgres.service | quote }}
+  value: {{ .Values.pg.app }}-service
 - name: PGPORT
   valueFrom:
-    configMapKeyRef:
-      name: {{ .Values.postgres.configmap | quote }}
+    secretKeyRef:
+      name: {{ .Values.pg.app }}-secret
       key: POSTGRES_PORT
 - name: PGUSER
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.postgres.secret | quote }}
-      key: username
+      name: {{ .Values.pg.app }}-secret
+      key: POSTGRES_USER
 - name: PGPASSWORD
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.postgres.secret | quote }}
-      key: password
-- name: PREFECTDB
-  value: {{ .Values.app | quote }}
-{{- end}}
+      name: {{ .Values.pg.app }}-secret
+      key: POSTGRES_PASSWORD
+- name: PREFECT_API_DATABASE_CONNECTION_URL
+  value: "postgresql+asyncpg://$(PGUSER):$(PGPASSWORD)@$(PGHOST):$(PGPORT)/{{ .Values.app }}"
+{{- end -}}
+
+{{- define "prefect.env" -}}
+- name: PREFECT_TASKS_DEFAULT_NO_CACHE
+  value: "true"
+- name: PREFECT_API_URL
+  value: "http://{{ .Values.app }}-server:{{ .Values.port }}/api"
+{{- end -}}

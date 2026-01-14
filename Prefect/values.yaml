@@ -1,10 +1,11 @@
-app: "prefect"
-image: "prefect-image:latest"
-server:
-  port: 4200
-  workpool: default-pool
-postgres:
-  configmap: "postgres-configmap"
-  secret: "postgres-auth-secret"
-  service: "postgres-service"
-  image: "postgres:alpine"
+app: prefect
+image:
+  name: prefecthq/prefect
+  tag: 3.6.10-python3.14-kubernetes
+port: 4200
+pg:
+  app: postgres
+  image:
+    name: postgres
+    tag: alpine
+workpool: default-pool

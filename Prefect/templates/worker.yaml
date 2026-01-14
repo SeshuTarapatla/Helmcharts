@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app }}-worker
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}-worker
+    spec:
+      initContainers:
+      - name: wait-for-prefect-server
+        image: "busybox:latest"
+        command: ["sh", "-c", "until nc -z {{ .Values.app }}-server {{ .Values.port }}; do echo WAITING; sleep 2; done"]
+      - name: create-work-pool
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        env: {{ include "prefect.env" . | nindent 12 }}
+        command: 
+          - sh
+          - -c
+          - |
+            prefect work-pool create {{ .Values.workpool }} --type process || true
+      containers:
+      - name: {{ .Values.app }}-worker
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        env: {{ include "prefect.env" . | nindent 12 }}
+        command: ["prefect", "worker", "start", "--pool", "{{ .Values.workpool }}"]
