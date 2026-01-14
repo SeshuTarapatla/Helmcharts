@@ -43,6 +43,8 @@ spec:
           env:
             - name: PREFECT_API_URL
               value: "http://{{ .Values.app }}-server:{{ .Values.server.port }}/api"
+            - name: PREFECT_TASKS_DEFAULT_NO_CACHE
+              value: "true"
           command: ["prefect", "worker", "start", "--pool", "{{ .Values.server.workpool }}"]
         - name: telegram-event-listener
           image: {{ .Values.image }}
