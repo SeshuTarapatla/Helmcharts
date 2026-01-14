@@ -6,7 +6,7 @@ spec:
   selector:
     app: {{ .Values.app }}
   ports:
-    - protocol: TCP
-      port: {{ .Values.port.target }}
-      targetPort: {{ .Values.port.target }}
+  - port: {{ .Values.port }}
+    targetPort: {{ .Values.port }}
+    protocol: TCP
   type: LoadBalancer
