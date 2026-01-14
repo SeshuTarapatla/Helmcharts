@@ -13,9 +13,9 @@ spec:
         app: {{ .Values.app }}-worker
     spec:
       volumes:
-        - name: insta-automate
-          hostPath:
-            path: {{ .Values.insta_automate.src }}
+        - name: insta-automate-secret
+          secret:
+            secretName: insta-automate-secret
       initContainers:
         - name: wait-for-prefect-server
           image: busybox:latest
@@ -44,6 +44,16 @@ spec:
             - name: PREFECT_API_URL
               value: "http://{{ .Values.app }}-server:{{ .Values.server.port }}/api"
           command: ["prefect", "worker", "start", "--pool", "{{ .Values.server.workpool }}"]
+        - name: telegram-event-listener
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PREFECT_API_URL
+              value: "http://{{ .Values.app }}-server:{{ .Values.server.port }}/api"
+          command: ["ia", "telegram", "serve"]
           volumeMounts:
-            - name: "insta-automate"
-              mountPath: {{ .Values.insta_automate.mnt }}
+            - name: insta-automate-secret
+              mountPath: /opt/prefect/.env
+              subPath: .env
+              readOnly: true
+              
