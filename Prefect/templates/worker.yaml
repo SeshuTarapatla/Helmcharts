@@ -28,3 +28,6 @@ spec:
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         env: {{ include "prefect.env" . | nindent 12 }}
         command: ["prefect", "worker", "start", "--pool", "{{ .Values.workpool }}"]
+        envFrom:
+          - secretRef:
+              name: {{ .Values.ia_secret }}
