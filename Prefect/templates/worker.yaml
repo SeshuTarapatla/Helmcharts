@@ -17,7 +17,7 @@ spec:
         command: ["sh", "-c", "until nc -z {{ .Values.app }}-server {{ .Values.port }}; do echo WAITING; sleep 2; done"]
       - name: create-work-pool
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        env: {{ include "prefect.env" . | nindent 12 }}
+        env: {{ include "worker.env" . | nindent 12 }}
         command: 
           - sh
           - -c
@@ -26,7 +26,7 @@ spec:
       containers:
       - name: {{ .Values.app }}-worker
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        env: {{ include "prefect.env" . | nindent 12 }}
+        env: {{ include "worker.env" . | nindent 12 }}
         command: ["prefect", "worker", "start", "--pool", "{{ .Values.workpool }}"]
         envFrom:
           - secretRef:

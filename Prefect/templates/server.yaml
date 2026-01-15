@@ -14,7 +14,7 @@ spec:
       initContainers:
       - name: {{ .Values.app }}-db-init
         image: "{{ .Values.pg.image.name }}:{{ .Values.pg.image.tag }}"
-        env: {{ include "pg.env" . | nindent 12 }}
+        env: {{ include "server.env" . | nindent 12 }}
         command:
           - sh
           - -c
@@ -31,5 +31,5 @@ spec:
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         ports:
         - containerPort: {{ .Values.port }}
-        env: {{ include "pg.env" . | nindent 12 }}
+        env: {{ include "server.env" . | nindent 12 }}
         command: ["prefect", "server", "start", "--host", "0.0.0.0"]
