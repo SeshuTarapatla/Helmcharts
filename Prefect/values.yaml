@@ -9,4 +9,7 @@ pg:
     name: postgres
     tag: alpine
 workpool: default-pool
-ia_secret: insta-automate-secret
+ia:
+  project: https://github.com/SeshuTarapatla/Insta-Automate
+  branch: prefect
+  secret: insta-automate-secret

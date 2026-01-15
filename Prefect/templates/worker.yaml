@@ -30,4 +30,17 @@ spec:
         command: ["prefect", "worker", "start", "--pool", "{{ .Values.workpool }}"]
         envFrom:
           - secretRef:
-              name: {{ .Values.ia_secret }}
+              name: {{ .Values.ia.secret }}
+      - name: "telegram-event-listener"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        env: {{ include "worker.env" . | nindent 12 }}
+        envFrom:
+          - secretRef:
+              name: {{ .Values.ia.secret }}
+        command:
+          - sh
+          - -c
+          - |
+            uv pip install --system "git+{{ .Values.ia.project }}@{{ .Values.ia.branch }}"
+            ia telegram serve
+        
