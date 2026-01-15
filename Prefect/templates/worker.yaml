@@ -43,4 +43,3 @@ spec:
           - |
             uv pip install --system "git+{{ .Values.ia.project }}@{{ .Values.ia.branch }}"
             ia telegram serve
-        
