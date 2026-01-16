@@ -15,6 +15,14 @@ spec:
           mountPath: /app/.env
           subPath: .env
           readOnly: true
+      env:
+      - name: WINDOWS_HOST
+        valueFrom:
+          configMapKeyRef:
+            name: wsl-config
+            key: WINDOWS_HOST
+      - name: ADB_SERVER_SOCKET
+        value: "tcp:$(WINDOWS_HOST):5037"
   volumes:
     - name: secrets
       secret:

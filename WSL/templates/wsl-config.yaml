@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}
 data:
-  WINDOWS_HOST: "http://{{ .Values.host | trim }}"
+  WINDOWS_HOST: "{{ .Values.host | trim }}"

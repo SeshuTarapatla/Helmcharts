@@ -32,4 +32,11 @@
   value: "http://{{ .Values.app }}-server:{{ .Values.port }}/api"
 - name: PG_CONNECTION_STRING
   value: "postgresql+psycopg2://$(PGUSER):$(PGPASSWORD)@$(PGHOST):$(PGPORT)"
+- name: WINDOWS_HOST
+  valueFrom:
+    configMapKeyRef:
+      name: wsl-config
+      key: WINDOWS_HOST
+- name: ADB_SERVER_SOCKET
+  value: "tcp:$(WINDOWS_HOST):5037"
 {{- end -}}
