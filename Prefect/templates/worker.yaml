@@ -22,7 +22,8 @@ spec:
           - sh
           - -c
           - |
-            prefect work-pool create {{ .Values.workpool }} --type process || true
+            prefect work-pool create {{ .Values.workpool }} --type process || true &&
+            prefect work-pool update {{ .Values.workpool }} --concurrency-limit 1
       containers:
       - name: {{ .Values.app }}-worker
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
@@ -42,4 +43,4 @@ spec:
           - -c
           - |
             uv pip install --system "git+{{ .Values.ia.project }}@{{ .Values.ia.branch }}"
-            ia telegram serve
+            ia serve
