@@ -1,0 +1,10 @@
+app: postgres
+image:
+  name: postgres
+  tag: alpine
+port: 5432
+user: seshu
+mount:
+  host: /mnt/c/Users/seshu/.postgres
+  target: /var/lib/postgresql
+password:
