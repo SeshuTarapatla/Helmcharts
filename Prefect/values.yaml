@@ -1,0 +1,5 @@
+app: prefect
+port: 4200
+image:
+  name: prefect-k3s
+  tag: 3.6.24-python3.12
