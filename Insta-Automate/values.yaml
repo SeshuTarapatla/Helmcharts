@@ -1,0 +1,4 @@
+app: insta-automate
+image:
+  name: insta-automate
+  tag: 3.6.25-python3.12

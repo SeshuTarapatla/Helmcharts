@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      initContainers:
+        - name: {{ .Values.app }}-telegram-init
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command: ["ia", "tl", "verify"]
+      containers:
+        - name: {{ .Values.app }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command:
+          - sh
+          - -c
+          - |
+            sleep infinity
+          
