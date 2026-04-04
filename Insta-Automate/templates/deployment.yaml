@@ -14,7 +14,7 @@ spec:
       initContainers:
         - name: {{ .Values.app }}-telegram-init
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          command: ["ia", "tl", "verify"]
+          command: ["ia", "tl", "init"]
       containers:
         - name: {{ .Values.app }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
