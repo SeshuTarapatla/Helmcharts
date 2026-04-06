@@ -15,10 +15,13 @@ spec:
         - name: {{ .Values.app }}-telegram-init
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["ia", "tl", "init"]
+        - name: {{ .Values.app }}-db-init
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command: ["ia", "db", "init"]
       containers:
         - name: {{ .Values.app }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          command:
+          command: # ["ia", "prefect", "serve"]
           - sh
           - -c
           - |
