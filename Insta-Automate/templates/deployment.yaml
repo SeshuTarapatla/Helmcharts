@@ -21,9 +21,9 @@ spec:
       containers:
         - name: {{ .Values.app }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          command: # ["ia", "prefect", "serve"]
-          - sh
-          - -c
-          - |
-            sleep infinity
+          command: ["ia", "prefect", "serve"]
+          # - sh
+          # - -c
+          # - |
+          #   sleep infinity
           
