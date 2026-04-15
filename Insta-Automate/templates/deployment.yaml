@@ -18,6 +18,9 @@ spec:
         - name: {{ .Values.app }}-db-init
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["ia", "db", "init"]
+        - name: {{ .Values.app }}-flow-init
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command: ["ia", "prefect", "deploy"]
       containers:
         - name: {{ .Values.app }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
