@@ -21,6 +21,7 @@ spec:
             - sh
             - -c
             - |
+              prefect work-pool delete {{ .Values.workpool }}
               prefect work-pool create {{ .Values.workpool }} --type process || true
       containers:
         - name: {{ .Values.app }}-worker
