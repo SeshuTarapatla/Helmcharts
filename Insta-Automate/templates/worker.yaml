@@ -21,8 +21,8 @@ spec:
             - sh
             - -c
             - |
-              prefect work-pool delete $PREFECT_DEFAULT_WORK_POOL_NAME
-              prefect work-pool create $PREFECT_DEFAULT_WORK_POOL_NAME --type process || true
+              prefect work-pool delete $IA_PREFECT_WORKPOOL
+              prefect work-pool create $IA_PREFECT_WORKPOOL --type process || true
       containers:
         - name: {{ .Values.app }}-worker
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
@@ -30,4 +30,4 @@ spec:
             - sh
             - -c
             - |
-              prefect worker start --pool $PREFECT_DEFAULT_WORK_POOL_NAME
+              prefect worker start --pool $IA_PREFECT_WORKPOOL
