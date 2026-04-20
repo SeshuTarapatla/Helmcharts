@@ -22,7 +22,8 @@ spec:
             - -c
             - |
               prefect work-pool delete $IA_PREFECT_WORKPOOL
-              prefect work-pool create $IA_PREFECT_WORKPOOL --type process || true
+              prefect work-pool create $IA_PREFECT_WORKPOOL --type process
+              prefect work-pool set-concurrency-limit $IA_PREFECT_WORKPOOL 1
       containers:
         - name: {{ .Values.app }}-worker
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
