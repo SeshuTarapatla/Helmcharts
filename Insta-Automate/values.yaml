@@ -2,3 +2,6 @@ app: insta-automate
 image:
   name: insta-automate
   tag: 3.6.27-python3.12
+mount:
+  host: /mnt/c/Users/seshu/Pictures/insta-automate
+  target: /insta-automate
