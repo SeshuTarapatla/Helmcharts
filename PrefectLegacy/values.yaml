@@ -1,0 +1,6 @@
+app: prefect
+port: 4200
+image:
+  name: prefect-k3s
+  tag: 3.6.27-python3.12
+workpool: default-workpool

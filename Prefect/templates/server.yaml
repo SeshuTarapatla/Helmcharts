@@ -3,36 +3,61 @@ kind: Deployment
 metadata:
   name: {{ .Values.app }}-server
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: {{ .Values.app }}
+      component: server
   template:
     metadata:
       labels:
         app: {{ .Values.app }}
+        component: server
     spec:
       initContainers:
         - name: {{ .Values.app }}-init
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["prefect-k3s", "init"]
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
       containers:
         - name: {{ .Values.app }}-server
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command:
-          - sh
-          - -c
-          - |
-            unset PREFECT_API_URL && prefect server start --host 0.0.0.0 --port {{ .Values.port }}
+            - sh
+            - -c
+            - |
+              unset PREFECT_API_URL && prefect server start --host 0.0.0.0 --port {{ .Values.port }}
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
           readinessProbe:
             httpGet:
               path: /api/health
               port: {{ .Values.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 20   # give server time to boot
+            periodSeconds: 10
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /api/health
               port: {{ .Values.port }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30   # don't kill it while it's still starting
+            periodSeconds: 15
+            failureThreshold: 4
+          startupProbe:              # blocks liveness until server is actually up
+            httpGet:
+              path: /api/health
+              port: {{ .Values.port }}
+            initialDelaySeconds: 10
             periodSeconds: 5
-          
+            failureThreshold: 12     # allows up to 70s for startup

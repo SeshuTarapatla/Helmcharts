@@ -5,11 +5,6 @@ metadata:
 spec:
   selector:
     app: {{ .Values.app }}
-    component: server   # only route to server, not worker
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 3600
   ports:
     - port: {{ .Values.port }}
       targetPort: {{ .Values.port }}

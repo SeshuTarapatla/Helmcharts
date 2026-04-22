@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app }}-server
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      initContainers:
+        - name: {{ .Values.app }}-init
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command: ["prefect-k3s", "init"]
+      containers:
+        - name: {{ .Values.app }}-server
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command:
+          - sh
+          - -c
+          - |
+            unset PREFECT_API_URL && prefect server start --host 0.0.0.0 --port {{ .Values.port }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          
