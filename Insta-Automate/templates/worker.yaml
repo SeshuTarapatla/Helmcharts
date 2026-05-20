@@ -17,7 +17,7 @@ spec:
             path: {{ .Values.mount.host }}
             type: DirectoryOrCreate
       initContainers:
-        - name: wait-for-{{ .Values.app }}
+        - name: wait-for-prefect
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["prefect-k3s", "wait"]
         - name: create-work-pool

@@ -11,7 +11,15 @@ spec:
       labels:
         app: {{ .Values.app }}
     spec:
+      volumes:
+        - name: {{ .Values.app }}-data
+          hostPath:
+            path: {{ .Values.mount.host }}
+            type: DirectoryOrCreate
       initContainers:
+        - name: wait-for-prefect
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          command: ["prefect-k3s", "wait"]
         - name: {{ .Values.app }}-telegram-init
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["ia", "tl", "init"]
@@ -25,6 +33,9 @@ spec:
         - name: {{ .Values.app }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           command: ["ia", "prefect", "serve"]
+          volumeMounts:
+            - name: {{ .Values.app }}-data
+              mountPath: {{ .Values.mount.target }}
           # - sh
           # - -c
           # - |
